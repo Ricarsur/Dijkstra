@@ -9,6 +9,19 @@ body {
     /* Chrome 10-25, Safari 5.1-6 */
     background: linear-gradient(to right, #78ffd6, #a8ff78);
     /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+
+}
+#graph-container {
+    position: relative;
+    width: 45%;
+    height: 0px; /* Ajusta la altura según tus necesidades */
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .node {
@@ -17,7 +30,7 @@ body {
     border: 2px solid #333;
     border-radius: 50%;
     text-align: center;
-    line-height: 50px;
+    line-height: 56px;
     background-color: #fff;
     position: absolute;
 }
