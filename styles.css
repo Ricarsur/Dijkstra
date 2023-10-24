@@ -17,7 +17,7 @@ body {
     border: 2px solid #333;
     border-radius: 50%;
     text-align: center;
-    line-height: 30px;
+    line-height: 50px;
     background-color: #fff;
     position: absolute;
 }
@@ -26,5 +26,9 @@ body {
     border: 2px solid #333;
     position: absolute;
     z-index: -1;
+}
+
+.visited-node {
+    background-color: #ff5733; /* Cambia el color de fondo a rojo, por ejemplo */
 }
 

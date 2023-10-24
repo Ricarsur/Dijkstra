@@ -1,66 +1,86 @@
 function dijkstra(graph, start, end) {
-    const distances = {};
-    const previous = {};
-    const nodes = new PriorityQueue();
-  
-    for (let node in graph) {
+  const distances = {};
+  const previous = {};
+  const nodes = new PriorityQueue();
+
+  for (let node in graph) {
       distances[node] = node === start ? 0 : Infinity;
       nodes.enqueue(node, distances[node]);
-    }
-  
-    while (!nodes.isEmpty()) {
+  }
+
+  while (!nodes.isEmpty()) {
       const current = nodes.dequeue();
       if (current === end) {
-        const path = [];
-        let node = current;
-        while (previous[node]) {
-          path.push(node);
-          node = previous[node];
-        }
-        return { distance: distances[end], path: path.concat(start).reverse() };
+          const path = [];
+          let node = current;
+          while (previous[node]) {
+              path.push(node);
+              node = previous[node];
+          }
+          return { distance: distances[end], path: path.concat(start).reverse() };
       }
-  
+
       if (distances[current] === Infinity) {
-        break;
+          break;
       }
-  
+
       for (let neighbor in graph[current]) {
-        const alt = distances[current] + graph[current][neighbor];
-        if (alt < distances[neighbor]) {
-          distances[neighbor] = alt;
-          previous[neighbor] = current;
-          nodes.enqueue(neighbor, alt);
-        }
+          const alt = distances[current] + graph[current][neighbor];
+          if (alt < distances[neighbor]) {
+              distances[neighbor] = alt;
+              previous[neighbor] = current;
+              nodes.enqueue(neighbor, alt);
+          }
       }
-    }
-  
-    return null;
   }
-  
-  class PriorityQueue {
-    constructor() {
+
+  return null;
+}
+
+class PriorityQueue {
+  constructor() {
       this.values = [];
-    }
-  
-    enqueue(value, priority) {
+  }
+
+  enqueue(value, priority) {
       this.values.push({ value, priority });
       this.sort();
-    }
-  
-    dequeue() {
-      return this.values.shift().value;
-    }
-  
-    isEmpty() {
-      return this.values.length === 0;
-    }
-  
-    sort() {
-      this.values.sort((a, b) => a.priority - b.priority);
-    }
   }
-  
-  function createNode(city, x, y) {
+
+  dequeue() {
+      return this.values.shift().value;
+  }
+
+  isEmpty() {
+      return this.values.length === 0;
+  }
+
+  sort() {
+      this.values.sort((a, b) => a.priority - b.priority);
+  }
+}
+
+function highlightVisitedNodes(visitedNodes) {
+  for (const city in coordinates) {
+      if (visitedNodes.includes(city)) {
+          updateNodeStyle(city, 'visited-node');
+      }
+  }
+}
+
+function updateNodeStyle(city, className) {
+  const nodes = document.getElementsByClassName('node');
+  for (const node of nodes) {
+      if (node.textContent === city) {
+          node.classList.add(className);
+      }
+  }
+}
+
+// Resto del código...
+
+
+function createNode(city, x, y) {
     const node = document.createElement('div');
     node.className = 'node';
     node.textContent = city;
@@ -81,10 +101,10 @@ function createEdge(startX, startY, endX, endY) {
 
 // Define el grafo de conexiones y distancias entre ciudades
 const graph = {
-    Madrid: { Bogota: 85, Barranquilla: 90, Medellin: 55, Bucaramanga: 67, Cali: 100 },
+    Madrid: { Bogota: 170, Barranquilla: 90, Medellin: 55, Bucaramanga: 67, Cali: 100 },
     Bogota: { SantaMarta: 150, Cucuta: 40, Armenia: 40, Popayan: 50 },
     Barranquilla: { SantaMarta: 15, Cucuta: 70, Armenia: 20, Popayan: 60 },
-    Medellin: { SantaMarta: 40, Cucuta: 47, Armenia: 33, Popayan: 27 },
+    Medellin: { SantaMarta: 70, Cucuta: 47, Armenia: 33, Popayan: 27 },
     Cali: { SantaMarta: 20, Cucuta: 38, Armenia: 10, Popayan: 40 },
     Bucaramanga: { SantaMarta: 98, Cucuta: 10, Armenia: 23, Popayan: 69 },
     Armenia: { Pereira: 60 },
@@ -121,10 +141,6 @@ for (const city in coordinates) {
     createNode(city, coordinates[city].x, coordinates[city].y);
 }
 
-// Crear aristas en la página
-
-
-
 
   const startNode = 'Madrid';
   const endNode = 'Valledupar';
@@ -132,9 +148,10 @@ for (const city in coordinates) {
   const result = dijkstra(graph, startNode, endNode);
   const resultDiv = document.getElementById('result');
 
-if (result) {
+  if (result) {
     resultDiv.innerHTML = `<p>La distancia más corta desde ${startNode} a ${endNode} es: ${result.distance} km</p>`;
     resultDiv.innerHTML += `<p>Camino: ${result.path.join(' -> ')}</p>`;
+    highlightVisitedNodes(result.path);
 } else {
     resultDiv.innerHTML = `<p>No se encontró un camino desde ${startNode} a ${endNode}</p>`;
 }
